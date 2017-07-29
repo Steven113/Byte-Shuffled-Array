@@ -18,18 +18,24 @@ class ShuffledArray{
 				
 		T get(int index, int key){
 			assert(index >= 0 && index<=count);
-			UnShuffleData(key);
+			//UnShuffleData(key);
+			
+			index = GetShiftedIndex(index, key);
+			
 			T result = arr[index]; 
-			ShuffleData(key);
+			//ShuffleData(key);
 			
 			return result;
 		}
 				
 		void Set(int index, int key, T item){
 			assert(index >= 0 && index<=count);
-			UnShuffleData(key);
+			//UnShuffleData(key);
+			
+			index = GetShiftedIndex(index, key);
+			
 			arr[index] = item;
-			ShuffleData(key);
+			//ShuffleData(key);
 		}
 
 		void ShuffleData(int key){
@@ -98,5 +104,26 @@ class ShuffledArray{
 				std::cout << arr[i] << " ";
 			}
 			std::cout << std::endl;
+		}
+		
+		int GetShiftedIndex(int index, int key){
+			int * shuffleIndexes = Random::GetKRandomInt(key, count*2);
+			
+			for (int i = 0; i<count*2; ++i){
+				shuffleIndexes[i]%=count;
+				if (shuffleIndexes[i]<0){
+					shuffleIndexes[i] += count;
+				}
+			}
+			
+			for (int i = 0; i<count; ++i){
+				if (shuffleIndexes[i*2] == index){
+					index = shuffleIndexes[i*2+1];
+				} else if (shuffleIndexes[i*2+1] == index){
+					index = shuffleIndexes[i*2];
+				}
+			}
+			
+			return index;
 		}
 };
