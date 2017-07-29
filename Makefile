@@ -1,4 +1,4 @@
-Driver.exe : Driver.cpp ShuffledArray.h
+Driver.exe : Driver.cpp ShuffledArray.h ByteShuffledArray.h
 	g++ -g -o Driver.exe Driver.cpp
 
 clean:

@@ -1,43 +1,37 @@
-#ifndef SHUFFLED_ARRAY
-#define SHUFFLED_ARRAY
-#include <assert.h>
-#include "Random.h"
-#include <iostream>
+#include "ShuffledArray.h"
 
 template <typename T>
-class ShuffledArray{
+class ByteShuffledArray{
 	protected:
-		T * arr;
+		char * arr;
 		int count;
-		
-		ShuffledArray(){}
 	public:
-		ShuffledArray(T * arr, int count, int key){
-			this->arr = arr;
+		ByteShuffledArray(T * arr, int count, int key){
+			this->arr = (char *)arr;
 			this->count = count;
 			ShuffleData(key);
 		}
 				
 		virtual T get(int index, int key){
 			assert(index >= 0 && index<=count);
-			//UnShuffleData(key);
+			UnShuffleData(key);
 			
-			index = GetShiftedIndex(index, key);
+			//index = GetShiftedIndex(index, key);
 			
-			T result = arr[index]; 
-			//ShuffleData(key);
+			T result = arr[index*sizeof(T)]; 
+			ShuffleData(key);
 			
 			return result;
 		}
 				
 		virtual void Set(int index, int key, T item){
 			assert(index >= 0 && index<=count);
-			//UnShuffleData(key);
+			UnShuffleData(key);
 			
-			index = GetShiftedIndex(index, key);
+			//index = GetShiftedIndex(index, key);
 			
-			arr[index] = item;
-			//ShuffleData(key);
+			arr[index*sizeof(T)] = item;
+			ShuffleData(key);
 		}
 
 		virtual void ShuffleData(int key){
@@ -47,16 +41,16 @@ class ShuffledArray{
 			std::cout << "Clamping Indexes: ";
 			
 			for (int i = 0; i<count*2; ++i){
-				shuffleIndexes[i]%=count;
+				shuffleIndexes[i]%=count*sizeof(T);
 				if (shuffleIndexes[i]<0){
-					shuffleIndexes[i] += count;
+					shuffleIndexes[i] += count*sizeof(T);
 				}
 				std::cout << shuffleIndexes[i] << " ";
 			}
 			
 			std::cout << std::endl;
 			
-			T temp;
+			char temp;
 			
 			for (int i = 0; i<count; ++i){
 				//std::cout << shuffleIndexes[i*2] << " shuffleIndexes[i*2]" <<std::endl;
@@ -69,7 +63,7 @@ class ShuffledArray{
 			
 			std::cout << "Shuffled array: ";
 			for (int i = 0; i<count; ++i){
-				std::cout << arr[i] << " ";
+				std::cout << *((T*)(arr + i*sizeof(T))) << " ";
 			}
 			std::cout << std::endl;
 		}
@@ -81,16 +75,16 @@ class ShuffledArray{
 			std::cout << "Clamping Indexes: ";
 			
 			for (int i = 0; i<count*2; ++i){
-				shuffleIndexes[i]%=count;
+				shuffleIndexes[i]%=count*sizeof(T);
 				if (shuffleIndexes[i]<0){
-					shuffleIndexes[i] += count;
+					shuffleIndexes[i] += count*sizeof(T);
 				}
 				std::cout << shuffleIndexes[i] << " ";
 			}
 			
 			std::cout << std::endl;
 			
-			T temp;
+			char temp;
 			
 			for (int i = count - 1; i>=0; --i){
 				//std::cout << shuffleIndexes[i*2] << " shuffleIndexes[i*2]" <<std::endl;
@@ -103,30 +97,8 @@ class ShuffledArray{
 			
 			std::cout << "Unshuffled array: ";
 			for (int i = 0; i<count; ++i){
-				std::cout << arr[i] << " ";
+				std::cout << *((T*)(arr + i*sizeof(T))) << " ";
 			}
 			std::cout << std::endl;
 		}
-		
-		virtual int GetShiftedIndex(int index, int key){
-			int * shuffleIndexes = Random::GetKRandomInt(key, count*2);
-			
-			for (int i = 0; i<count*2; ++i){
-				shuffleIndexes[i]%=count;
-				if (shuffleIndexes[i]<0){
-					shuffleIndexes[i] += count;
-				}
-			}
-			
-			for (int i = 0; i<count; ++i){
-				if (shuffleIndexes[i*2] == index){
-					index = shuffleIndexes[i*2+1];
-				} else if (shuffleIndexes[i*2+1] == index){
-					index = shuffleIndexes[i*2];
-				}
-			}
-			
-			return index;
-		}
 };
-#endif
