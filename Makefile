@@ -1,11 +1,14 @@
-Driver.exe : Driver.cpp ShuffledArray.h ByteShuffledArray.h
-	g++ -g -o Driver.exe Driver.cpp
+DriverGCC.exe : Driver.cpp ShuffledArray.h ByteShuffledArray.h
+	g++ -g -o DriverGCC.exe Driver.cpp -std=c++11
+
+DriverWin.exe : Driver.cpp ShuffledArray.h ByteShuffledArray.h
+	cl /EHsc Driver.cpp /link /out:DriverWin.exe
 
 clean:
-	del /F Driver.exe
+	del /F *.exe
 
 run:
-	Driver.exe
+	DriverGCC.exe
 
 gadd:
 	git add *.cpp

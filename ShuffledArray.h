@@ -1,8 +1,24 @@
 #ifndef SHUFFLED_ARRAY
 #define SHUFFLED_ARRAY
-#include <assert.h>
 #include "Random.h"
 #include <iostream>
+#include <string>
+#include <assert.h>
+
+
+
+
+/*
+	Protects an array of objects of type T in memory
+	by keeping it scrambled at the object level in memory when not getting 
+	or setting values. A getter or setter can only get
+	the correct data by providing the key used to construct this array.
+	
+	To prevent the key from being cracked you should occasionally regenerate the
+	array with a new key. A instance of the class RandomK or a class derived from 
+	it is needed to generate the random values generated for this class to used
+	when scambling the memory. Note that the key is used as a seed for the generator.
+*/
 
 template <typename T>
 class ShuffledArray{
@@ -10,11 +26,21 @@ class ShuffledArray{
 		T * arr;
 		int count;
 		
+		Random::RandomK random;
+		
 		ShuffledArray(){}
 	public:
-		ShuffledArray(T * arr, int count, int key){
+		ShuffledArray(T * arr, int count, int key, Random::RandomK random){
 			this->arr = arr;
 			this->count = count;
+			this->random = random;
+			
+			int numBytesPerObject = sizeof(T);
+			
+			for (int i = 0; i<count * numBytesPerObject; ++i){
+				arr[i];
+			}
+			
 			ShuffleData(key);
 		}
 				
@@ -42,7 +68,7 @@ class ShuffledArray{
 
 		virtual void ShuffleData(int key){
 			std::cout << "Shuffle array" <<std::endl;
-			int * shuffleIndexes = Random::GetKRandomInt(key, count*2);
+			int * shuffleIndexes = random.GetKRandomInt(key, count*2);
 			
 			std::cout << "Clamping Indexes: ";
 			
@@ -76,7 +102,7 @@ class ShuffledArray{
 				
 		virtual void UnShuffleData(int key){
 			std::cout << "Unshuffle array" <<std::endl;
-			int * shuffleIndexes = Random::GetKRandomInt(key, count*2);
+			int * shuffleIndexes = random.GetKRandomInt(key, count*2);
 			
 			std::cout << "Clamping Indexes: ";
 			
@@ -109,7 +135,7 @@ class ShuffledArray{
 		}
 		
 		virtual int GetShiftedIndex(int index, int key){
-			int * shuffleIndexes = Random::GetKRandomInt(key, count*2);
+			int * shuffleIndexes = random.GetKRandomInt(key, count*2);
 			
 			for (int i = 0; i<count*2; ++i){
 				shuffleIndexes[i]%=count;
