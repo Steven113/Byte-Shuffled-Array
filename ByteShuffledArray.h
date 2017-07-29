@@ -25,11 +25,11 @@ class ByteShuffledArray{
 			this->count = count;
 			this->random = random;
 			
-			int numBytesPerObject = sizeof(T);
+			/* int numBytesPerObject = sizeof(T);
 			
 			for (int i = 0; i<count * numBytesPerObject; ++i){
 				arr[i];
-			}
+			} */
 			
 			ShuffleData(key);
 		}
