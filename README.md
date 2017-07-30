@@ -8,7 +8,12 @@ that overrides GetKRandomInt()) and override the memory shuffling if you want.
 
 Note that the provided classes, ShuffledArray and ByteShuffledArray, do not store any internal 
 state about how they were shuffled. This means that someone analyzing the array stored in the 
-class can't see any explicit information on the shuffling.
+class can't see any explicit information on the shuffling. However, there is a higher performance
+cost for using the class.
+
+This class currently only works using a build with the CL compiler. The g++ compiled version causes
+an issue with being unable to throw a array size error due to a unlinked library and I still
+need to work out why. No part of the g++ build bug makes sense.
 
 ## ShuffledArray
 This class provides very simple shuffling. It just moves the data items around. When a value 
@@ -42,4 +47,6 @@ in bytes. Thus the getter complexity is O(N*K). N is a constant specific to the 
 
 With getters, no data is actually swapped. Instead the items/bytes are llocated and derefenced to copy what is stored
 there.
+
+##Usage
 
