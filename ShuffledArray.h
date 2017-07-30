@@ -23,13 +23,15 @@
 template <typename T>
 class ShuffledArray{
 	protected:
-		T * arr;
+		
 		int count;
 		
 		Random::RandomK random;
 		
 		ShuffledArray(){}
 	public:
+		T * arr;
+		
 		ShuffledArray(T * arr, int count, int key, Random::RandomK random){
 			this->arr = arr;
 			this->count = count;

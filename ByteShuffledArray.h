@@ -16,12 +16,12 @@
 template <typename T>
 class ByteShuffledArray{
 	protected:
-		char * arr;
+		ShuffledArray<char> * arr;
 		int count;
 		Random::RandomK random;
 	public:
 		ByteShuffledArray(T * arr, int count, int key,Random::RandomK random){
-			this->arr = (char *)arr;
+			this->arr = new ShuffledArray<char>((char *)arr,count*sizeof(T),key,random);
 			this->count = count;
 			this->random = random;
 			
@@ -38,9 +38,15 @@ class ByteShuffledArray{
 			assert(index >= 0 && index<=count);
 			UnShuffleData(key);
 			
+			int numBytes = sizeof(T);
+			char data[sizeof(T)];
+			for (int i = 0; i<numBytes; ++i){
+				data[i] = arr->get(index*numBytes + i, key);
+			}
+			
 			//index = GetShiftedIndex(index, key);
 			
-			T result = arr[index*sizeof(T)]; 
+			T result = *((T*)&data); 
 			ShuffleData(key);
 			
 			return result;
@@ -55,7 +61,13 @@ class ByteShuffledArray{
 			T * result = new T[end-start];
 
 			for (int i = start; i<end; ++i){
-				result[i-start] = arr[i*sizeof(T)];
+				int numBytes = sizeof(T);
+			char data[sizeof(T)];
+			for (int j = 0; j<numBytes; ++j){
+				data[j] = arr->get(i*numBytes + j, key);
+			} 
+				
+			result[i-start] = *((T*)&data);
 			}
 			
 			ShuffleData(key);
@@ -65,16 +77,16 @@ class ByteShuffledArray{
 				
 		virtual void Set(int index, int key, T item){
 			assert(index >= 0 && index<=count);
-			UnShuffleData(key);
+			arr->UnShuffleData(key);
 			
 			//index = GetShiftedIndex(index, key);
 			
-			arr[index*sizeof(T)] = item;
-			ShuffleData(key);
+			arr->arr[index*sizeof(T)] = item;
+			arr->ShuffleData(key);
 		}
 
 		virtual void ShuffleData(int key){
-			//std::cout << "Shuffle array" <<std::endl;
+			/* //std::cout << "Shuffle array" <<std::endl;
 			int * shuffleIndexes = random.GetKRandomInt(key, count*2);
 			
 			//std::cout << "Clamping Indexes: ";
@@ -98,13 +110,13 @@ class ByteShuffledArray{
 				arr[shuffleIndexes[i*2]] = arr[shuffleIndexes[i*2 + 1]];
 				arr[shuffleIndexes[i*2 + 1]] = temp;
 				//std::cout << i << " i" <<std::endl;
-			}
+			} */
 			
 			int numBytes = count * sizeof(T);
 			int bitOffsets[] = {0,8,16,24};
 			for (int i = 0; i< numBytes; i+=4){
 				for (int j = 0; j<4; ++j){
-					arr[i+j] ^= key >> bitOffsets[j];
+					arr->arr[i+j] ^= key >> bitOffsets[j];
 				}
 			}
 			
@@ -122,11 +134,11 @@ class ByteShuffledArray{
 			int bitOffsets[] = {0,8,16,24};
 			for (int i = 0; i< numBytes; i+=4){
 				for (int j = 0; j<4; ++j){
-					arr[i+j] ^= key >> bitOffsets[j];
+					arr->arr[i+j] ^= key >> bitOffsets[j];
 				}
 			}
 			
-			int * shuffleIndexes = random.GetKRandomInt(key, count*2);
+			/* int * shuffleIndexes = random.GetKRandomInt(key, count*2);
 			
 			//std::cout << "Clamping Indexes: ";
 			
@@ -149,7 +161,7 @@ class ByteShuffledArray{
 				arr[shuffleIndexes[i*2]] = arr[shuffleIndexes[i*2 + 1]];
 				arr[shuffleIndexes[i*2 + 1]] = temp;
 				//std::cout << i << " i" <<std::endl;
-			}
+			} */
 			
 			//std::cout << "Unshuffled array: ";
 			//for (int i = 0; i<count; ++i){
