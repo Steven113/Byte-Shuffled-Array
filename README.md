@@ -9,14 +9,7 @@ that overrides GetKRandomInt()) and override the memory shuffling if you want.
 Note that the provided classes, ShuffledArray and ByteShuffledArray, do not store any internal 
 state about how they were shuffled. This means that someone analyzing the array stored in the 
 class can't see any explicit information on the shuffling. However, there is a higher performance
-cost for using the class.
-
-This class currently only works using a build with the CL compiler. This means you need a Visual
-Studio install.
-
-The g++ compiled version causes an issue with being unable to throw a array size error
-due to a unlinked library and I still need to work out why. No part of the g++ build
-bug makes sense. It's possible my g++ install has a peculiar error.
+cost for using the class this way.
 
 ## ShuffledArray
 This class provides very simple shuffling. It just moves the data items around. When a value 
@@ -56,7 +49,7 @@ there.
 ## Usage
 
 ### Demo
-The default makefile rule compiles a executable DriverWin.exe using the CL.exe compiler. If you want to try a g++ build 
+The default makefile rule compiles a executable DriverWin.exe using the CL.exe compiler. If you want to do a g++ build 
 invoke the makefile rule "DriverGCC.exe". DriverGCC.exe is the g++ build. If you run either program a demo will run
 where a int array and a char array is generated and then printed out to confirm the shuffling and unshuffling is working
 correctly.
