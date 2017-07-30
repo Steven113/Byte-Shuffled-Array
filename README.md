@@ -46,7 +46,9 @@ Shuffling and unshuffling involve swapping the data in the item slots using temp
 do not actually unshuffle the arrays and instead calculate where the data went. The K random numbers need
 to be generated and for every item N the K random numbers must be iterated through to get the data back.
 In the case of the ShuffledArray K = 1 because we have one item. In the case of the ByteShuffledArray N = sizeof(T)
-in bytes. Thus the getter complexity is O(N*K). N is a constant specific to the type stored in the array.
+in bytes. Thus the getter complexity is O(N*K). N is a constant specific to the type stored in the array. In practice
+shuffling and unshuffling the entire array will be slower than retrieving data. Setting data in the ByteShuffledArray
+will be as slow as shuffling and unshuffling because the data is unshuffled to ensure the correct bytes are written to.
 
 With getters, no data is actually swapped. Instead the items/bytes are llocated and derefenced to copy what is stored
 there.
@@ -58,4 +60,8 @@ The default makefile rule compiles a executable DriverWin.exe using the CL.exe c
 invoke the makefile rule "DriverGCC.exe". DriverGCC.exe is the g++ build. If you run either program a demo will run
 where a int array and a char array is generated and then printed out to confirm the shuffling and unshuffling is working
 correctly.
+
+### Your Own Implementation
+If deriving from the RandomK class you must ensure that GetKRandomInt(int key, int K) must always return the same sequence of 
+random integers given a seed "key". If you call the function with K = 3 the 3 integers you get back must match the first 3 integers you'd get when calling the funciton with K = 5. Thus K cannot be used to calculate the random values.
 
