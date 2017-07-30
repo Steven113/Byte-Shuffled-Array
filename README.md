@@ -11,9 +11,12 @@ state about how they were shuffled. This means that someone analyzing the array 
 class can't see any explicit information on the shuffling. However, there is a higher performance
 cost for using the class.
 
-This class currently only works using a build with the CL compiler. The g++ compiled version causes
-an issue with being unable to throw a array size error due to a unlinked library and I still
-need to work out why. No part of the g++ build bug makes sense.
+This class currently only works using a build with the CL compiler. This means you need a Visual
+Studio install.
+
+The g++ compiled version causes an issue with being unable to throw a array size error
+due to a unlinked library and I still need to work out why. No part of the g++ build
+bug makes sense. It's possible my g++ install has a peculiar error.
 
 ## ShuffledArray
 This class provides very simple shuffling. It just moves the data items around. When a value 
@@ -48,5 +51,11 @@ in bytes. Thus the getter complexity is O(N*K). N is a constant specific to the 
 With getters, no data is actually swapped. Instead the items/bytes are llocated and derefenced to copy what is stored
 there.
 
-##Usage
+## Usage
+
+### Demo
+The default makefile rule compiles a executable DriverWin.exe using the CL.exe compiler. If you want to try a g++ build 
+invoke the makefile rule "DriverGCC.exe". DriverGCC.exe is the g++ build. If you run either program a demo will run
+where a int array and a char array is generated and then printed out to confirm the shuffling and unshuffling is working
+correctly.
 
