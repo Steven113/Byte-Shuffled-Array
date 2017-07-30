@@ -141,8 +141,8 @@ class ByteShuffledArray{
 			//std::cout << std::endl;
 		}
 		
-		/* virtual void ShuffleDataItem(int key, int index){
-			std::cout << "Shuffle array" <<std::endl;
+/* 		virtual void ShuffleDataItem(int key, int index){
+			std::cout << "Shuffle array partial" <<std::endl;
 			int * shuffleIndexes = random.GetKRandomInt(key, count*2);
 			
 			std::cout << "Clamping Indexes: ";
@@ -158,28 +158,41 @@ class ByteShuffledArray{
 			std::cout << std::endl;
 			
 			int numBytes = sizeof(T);
-			int indexes[numBytes];
+			int indexes[sizeof(T)];
 			int start = index*numBytes;
 			indexes[0] = start;
 			for (int i = 1; i<numBytes; ++i){
-				indexes[i] = indexes[i-1] + 1;
+				indexes[i] = start + i;
 			}
 			
-			for (int i = 0; i<count; ++i){
-				for (int j = 0; j<numBytes; ++j){
+			char temp;
+			for (int j = 0; j<numBytes; ++j){
+				for (int i = count-1; i>=0; --i){
 					if (indexes[j] == shuffleIndexes[i*2]){
 						indexes [j] = shuffleIndexes[i*2+1];
 					} else if (indexes[j] == shuffleIndexes[i*2+1]){
 						indexes [j] = shuffleIndexes[i*2];
 					}
 				}
+				
+				temp = arr[indexes[j]];
+				arr[indexes[j]] = arr[start + j];
+				arr[start + j] = temp;
 			}
 			
-			char temp;
+			
 			for (int j = 0; j<numBytes; ++j){
 				temp = arr[indexes[j]];
 				arr[indexes[j]] = arr[start + j];
-				arr[start + j] = j;
+				arr[start + j] = temp;
+			}
+			
+			numBytes = count * sizeof(T);
+			int bitOffsets[] = {0,8,16,24};
+			for (int i = 0; i< numBytes; i+=4){
+				for (int j = 0; j<4; ++j){
+					arr[i+j] ^= key >> bitOffsets[j];
+				}
 			}
 			
 			std::cout << "Shuffled array: ";
@@ -190,7 +203,7 @@ class ByteShuffledArray{
 		}
 				
 		virtual void UnShuffleDataItem(int key, int index){
-			std::cout << "Unshuffle array" <<std::endl;
+			std::cout << "Unshuffle array partial" <<std::endl;
 			int * shuffleIndexes = random.GetKRandomInt(key, count*2);
 			
 			std::cout << "Clamping Indexes: ";
@@ -205,29 +218,43 @@ class ByteShuffledArray{
 			
 			std::cout << std::endl;
 			
-			int numBytes = sizeof(T);
-			int indexes[numBytes];
+			int numBytes = count * sizeof(T);
+			int bitOffsets[] = {0,8,16,24};
+			for (int i = 0; i< numBytes; i+=4){
+				for (int j = 0; j<4; ++j){
+					arr[i+j] ^= key >> bitOffsets[j];
+				}
+			}
+			
+			numBytes = sizeof(T);
+			int indexes[sizeof(T)];
 			int start = index*numBytes;
 			indexes[0] = start;
 			for (int i = 1; i<numBytes; ++i){
-				indexes[i] = indexes[i-1] + 1;
-			}
-			
-			for (int i = 0; i<count; ++i){
-				for (int j = 0; j<numBytes; ++j){
-					if (indexes[j] == shuffleIndexes[i*2]){
-						indexes [j] = shuffleIndexes[i*2+1];
-					} else if (indexes[j] == shuffleIndexes[i*2+1]){
-						indexes [j] = shuffleIndexes[i*2];
-					}
-				}
+				indexes[i] = start + i;
 			}
 			
 			char temp;
 			for (int j = 0; j<numBytes; ++j){
+				for (int i = 0; i<count; ++i){
+					if (indexes[j] == shuffleIndexes[i*2+1]){
+						indexes [j] = shuffleIndexes[i*2];
+					} else if (indexes[j] == shuffleIndexes[i*2]){
+						indexes [j] = shuffleIndexes[i*2+1];
+					}
+				}
+				
 				temp = arr[indexes[j]];
 				arr[indexes[j]] = arr[start + j];
-				arr[start + j] = j;
+				arr[start + j] = temp;
+			}
+			
+			
+			
+			for (int j = 0; j<numBytes; ++j){
+				temp = arr[indexes[j]];
+				arr[indexes[j]] = arr[start + j];
+				arr[start + j] = temp;
 			}
 			
 			std::cout << "Unshuffled array: ";
