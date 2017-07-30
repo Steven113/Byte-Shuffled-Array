@@ -119,6 +119,8 @@ class ShuffledArray{
 				std::cout << arr[i] << " ";
 			}
 			std::cout << std::endl;
+			
+			delete [] shuffleIndexes;
 		}
 				
 		virtual void UnShuffleData(int key){
@@ -159,6 +161,8 @@ class ShuffledArray{
 				std::cout << arr[i] << " ";
 			}
 			std::cout << std::endl;
+			
+			delete [] shuffleIndexes;
 		}
 		
 		/*
@@ -192,6 +196,8 @@ class ShuffledArray{
 					index = shuffleIndexes[i*2];
 				}
 			}
+			
+			delete [] shuffleIndexes;
 			
 			return index;
 		}

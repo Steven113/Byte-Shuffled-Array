@@ -8,7 +8,7 @@ clean:
 	del /F *.exe
 
 run:
-	DriverGCC.exe
+	DriverWin.exe
 
 gadd:
 	git add *.cpp
