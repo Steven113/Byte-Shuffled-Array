@@ -45,6 +45,23 @@ class ByteShuffledArray{
 			
 			return result;
 		}
+		
+		virtual T * getRange(int start, int end, int key){
+			assert(start >= 0 && end>=start && end<=count);
+			UnShuffleData(key);
+			
+			//index = GetShiftedIndex(index, key);
+			
+			T * result = new T[end-start];
+
+			for (int i = start; i<end; ++i){
+				result[i-start] = arr[i*sizeof(T)];
+			}
+			
+			ShuffleData(key);
+			
+			return result;
+		}
 				
 		virtual void Set(int index, int key, T item){
 			assert(index >= 0 && index<=count);
