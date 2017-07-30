@@ -50,6 +50,10 @@ class ShuffledArray{
 			assert(index >= 0 && index<=count);
 			//UnShuffleData(key);
 			
+			/*
+				instead of unshuffling data, just find the index of the
+				item in the shuffled array
+			*/
 			index = GetShiftedIndex(index, key);
 			
 			T result = arr[index]; 
@@ -62,6 +66,10 @@ class ShuffledArray{
 			assert(index >= 0 && index<=count);
 			//UnShuffleData(key);
 			
+			/*
+				instead of unshuffling data, just find the index of the
+				item in the shuffled array
+			*/
 			index = GetShiftedIndex(index, key);
 			
 			arr[index] = item;
@@ -70,20 +78,24 @@ class ShuffledArray{
 
 		virtual void ShuffleData(int key){
 			std::cout << "Shuffle array" <<std::endl;
+			//get count*2 random ints
 			int * shuffleIndexes = random.GetKRandomInt(key, count*2);
 			
-			std::cout << "Clamping Indexes: ";
+			/*
+				Clamp the random indexes to the range occupied by the array
+			*/
 			
 			for (int i = 0; i<count*2; ++i){
 				shuffleIndexes[i]%=count;
 				if (shuffleIndexes[i]<0){
 					shuffleIndexes[i] += count;
 				}
-				std::cout << shuffleIndexes[i] << " ";
+				//std::cout << shuffleIndexes[i] << " ";
 			}
 			
-			std::cout << std::endl;
-			
+			/*
+				Shuffle data
+			*/
 			T temp;
 			
 			for (int i = 0; i<count; ++i){
@@ -104,20 +116,26 @@ class ShuffledArray{
 				
 		virtual void UnShuffleData(int key){
 			std::cout << "Unshuffle array" <<std::endl;
+			//get random indexes
 			int * shuffleIndexes = random.GetKRandomInt(key, count*2);
 			
-			std::cout << "Clamping Indexes: ";
+			/*
+				Clamp the random indexes to the range occupied by the array
+			*/
 			
 			for (int i = 0; i<count*2; ++i){
 				shuffleIndexes[i]%=count;
 				if (shuffleIndexes[i]<0){
 					shuffleIndexes[i] += count;
 				}
-				std::cout << shuffleIndexes[i] << " ";
+				//std::cout << shuffleIndexes[i] << " ";
 			}
 			
-			std::cout << std::endl;
+			//std::cout << std::endl;
 			
+			/*
+				Shuffle items
+			*/
 			T temp;
 			
 			for (int i = count - 1; i>=0; --i){
@@ -136,6 +154,10 @@ class ShuffledArray{
 			std::cout << std::endl;
 		}
 		
+		/*
+			Get item at index by finding where the shuffling process moves it 
+			in array
+		*/
 		virtual int GetShiftedIndex(int index, int key){
 			int * shuffleIndexes = random.GetKRandomInt(key, count*2);
 			
@@ -146,6 +168,16 @@ class ShuffledArray{
 				}
 			}
 			
+			/*
+				Goes through the shuffling indexes. When 
+				index shuffleIndexes[i*2] needs to be swapped with 
+				shuffleIndexes[i*2+1] and index === shuffleIndexes[i*2]
+				or shuffleIndexes[i*2+1] == index, index must be 
+				assigned to the shuffle index value. For example if we 
+				start with index 3 and it is swapped with index 7, 
+				we now want to find where index 7 is swapped with another
+				index
+			*/
 			for (int i = 0; i<count; ++i){
 				if (shuffleIndexes[i*2] == index){
 					index = shuffleIndexes[i*2+1];
