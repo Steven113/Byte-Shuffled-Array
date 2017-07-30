@@ -22,7 +22,7 @@ This class shuffles arrays at the byte level. The array that is passed in is tre
 char array with sizeof(type stored in array) * numElements. When a item is retrieved the
 class works out which bytes contained the original item and finds where those bytes
 were moved to. The data stored in those bytes is retrieved and combined to recreate the 
-original item **without unshuffling the array.**. Each byte is also XORed with the key.
+original item **without unshuffling the array**. Each byte is also XORed with the key.
 
 Internally the ByteShuffledArray uses a ShuffledArray of type char to shuffle the bytes and retrieve
 them.
