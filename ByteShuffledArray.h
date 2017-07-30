@@ -22,6 +22,14 @@ class ByteShuffledArray{
 		int count;
 		Random::RandomK random;
 	public:
+		/*
+			arr = data array
+			count = num items in array
+			key = key used to shuffle and unshuffle array
+			random = a instance of the class Random::RandomK (or a derived class)
+			which is used for random generation.
+		*/
+	
 		ByteShuffledArray(T * arr, int count, int key,Random::RandomK random){
 			this->arr = new ShuffledArray<char>((char *)arr,count*sizeof(T),key,random);
 			this->count = count;

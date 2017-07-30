@@ -32,6 +32,13 @@ class ShuffledArray{
 	public:
 		T * arr;
 		
+		/*
+			arr = data array
+			count = num items in array
+			key = key used to shuffle and unshuffle array
+			random = a instance of the class Random::RandomK (or a derived class)
+			which is used for random generation.
+		*/
 		ShuffledArray(T * arr, int count, int key, Random::RandomK random){
 			this->arr = arr;
 			this->count = count;
