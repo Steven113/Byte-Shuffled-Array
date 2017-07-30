@@ -93,10 +93,13 @@ class ByteShuffledArray{
 		virtual void Set(int index, int key, T item){
 			assert(index >= 0 && index<=count);
 			arr->UnShuffleData(key);
+			UnShuffleData(key);
 			
 			//index = GetShiftedIndex(index, key);
 			
 			arr->arr[index*sizeof(T)] = item;
+			
+			ShuffleData(key);
 			arr->ShuffleData(key);
 		}
 
