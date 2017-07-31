@@ -11,12 +11,14 @@ state about how they were shuffled. This means that someone analyzing the array 
 class can't see any explicit information on the shuffling. However, there is a higher performance
 cost for using the class this way.
 
+**Warning**: Do not use these classes to store arrays of objects. There is a strong chance of a
+buffer overflow exception. I've been having trouble compensation for the alignment and padding
+of objects.
+
 ## ShuffledArray
 This class provides very simple shuffling. It just moves the data items around. When a value 
 is retrieved or set the entire array is not unshuffled. Instead, the getters and setters use
 the key to work out where the item was moved and get it from there.
-
-Note that this class should theoeretically be able to shuffle any type.
 
 ## ByteShuffledArray
 This class shuffles arrays at the byte level. The array that is passed in is treated as a 
@@ -28,7 +30,7 @@ original item **without unshuffling the array**. Each byte is also XORed with th
 Internally the ByteShuffledArray uses a ShuffledArray of type char to shuffle the bytes and retrieve
 them.
 
-##Performance
+## Performance
 Both classes generate K*2 random values for the shuffling. In the case of the ShuffledArray K = num items * 2
 whiile for the ByteShuffledArray K = num items * numBytes * 2 in each item.  For the ByteShuffledArray there
 is a step where each byte is XORed with the key so that will take another K steps. For both classes the shuffling
