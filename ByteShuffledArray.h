@@ -85,7 +85,7 @@ class ByteShuffledArray{
 
 			for (int i = start; i<end; ++i){
 				int numBytes = sizeof(T);
-			char data[sizeof(T)];
+				char data[sizeof(T)];
 			for (int j = 0; j<numBytes; ++j){
 				data[j] = arr->get(i*numBytes + j, key);
 			} 

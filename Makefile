@@ -1,8 +1,8 @@
 DriverWin.exe : Driver.cpp ShuffledArray.h ByteShuffledArray.h
 	cl /EHsc Driver.cpp /link /out:DriverWin.exe
 
-DriverGCC.exe : Driver.cpp ShuffledArray.h ByteShuffledArray.h
-	g++ -g -o DriverGCC.exe Driver.cpp -std=c++11
+DriverGCC.exe : Driver.cpp ShuffledArray.h ByteShuffledArray.h Random.h
+	g++ -g -Wall -o DriverGCC.exe Driver.cpp -std=c++11
 
 clean:
 	del /F *.exe

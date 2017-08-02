@@ -86,13 +86,13 @@ class ShuffledArray{
 		virtual void ShuffleData(int key){
 			std::cout << "Shuffle array" <<std::endl;
 			//get count*2 random ints
-			int * shuffleIndexes = random.GetKRandomInt(key, count*2);
+			int * shuffleIndexes = random.GetKRandomInt(key, count);
 			
 			/*
 				Clamp the random indexes to the range occupied by the array
 			*/
 			
-			for (int i = 0; i<count*2; ++i){
+			for (int i = 0; i<count; ++i){
 				shuffleIndexes[i]%=count;
 				if (shuffleIndexes[i]<0){
 					shuffleIndexes[i] += count;
@@ -108,9 +108,9 @@ class ShuffledArray{
 			for (int i = 0; i<count; ++i){
 				//std::cout << shuffleIndexes[i*2] << " shuffleIndexes[i*2]" <<std::endl;
 				//std::cout << shuffleIndexes[i*2+1] << " shuffleIndexes[i*2+1]" <<std::endl;
-				temp = arr[shuffleIndexes[i*2]];
-				arr[shuffleIndexes[i*2]] = arr[shuffleIndexes[i*2 + 1]];
-				arr[shuffleIndexes[i*2 + 1]] = temp;
+				temp = arr[shuffleIndexes[i]];
+				arr[shuffleIndexes[i]] = arr[i];
+				arr[i] = temp;
 				//std::cout << i << " i" <<std::endl;
 			}
 			
@@ -126,13 +126,13 @@ class ShuffledArray{
 		virtual void UnShuffleData(int key){
 			std::cout << "Unshuffle array" <<std::endl;
 			//get random indexes
-			int * shuffleIndexes = random.GetKRandomInt(key, count*2);
+			int * shuffleIndexes = random.GetKRandomInt(key, count);
 			
 			/*
 				Clamp the random indexes to the range occupied by the array
 			*/
 			
-			for (int i = 0; i<count*2; ++i){
+			for (int i = 0; i<count; ++i){
 				shuffleIndexes[i]%=count;
 				if (shuffleIndexes[i]<0){
 					shuffleIndexes[i] += count;
@@ -150,9 +150,9 @@ class ShuffledArray{
 			for (int i = count - 1; i>=0; --i){
 				//std::cout << shuffleIndexes[i*2] << " shuffleIndexes[i*2]" <<std::endl;
 				//std::cout << shuffleIndexes[i*2+1] << " shuffleIndexes[i*2+1]" <<std::endl;
-				temp = arr[shuffleIndexes[i*2]];
-				arr[shuffleIndexes[i*2]] = arr[shuffleIndexes[i*2 + 1]];
-				arr[shuffleIndexes[i*2 + 1]] = temp;
+				temp = arr[shuffleIndexes[i]];
+				arr[shuffleIndexes[i]] = arr[i];
+				arr[i] = temp;
 				//std::cout << i << " i" <<std::endl;
 			}
 			
@@ -170,9 +170,9 @@ class ShuffledArray{
 			in array
 		*/
 		virtual int GetShiftedIndex(int index, int key){
-			int * shuffleIndexes = random.GetKRandomInt(key, count*2);
+			int * shuffleIndexes = random.GetKRandomInt(key, count);
 			
-			for (int i = 0; i<count*2; ++i){
+			for (int i = 0; i<count; ++i){
 				shuffleIndexes[i]%=count;
 				if (shuffleIndexes[i]<0){
 					shuffleIndexes[i] += count;
@@ -190,10 +190,10 @@ class ShuffledArray{
 				index
 			*/
 			for (int i = 0; i<count; ++i){
-				if (shuffleIndexes[i*2] == index){
-					index = shuffleIndexes[i*2+1];
-				} else if (shuffleIndexes[i*2+1] == index){
-					index = shuffleIndexes[i*2];
+				if (i == index){
+					index = shuffleIndexes[i];
+				} else if (shuffleIndexes[i] == index){
+					index = i;
 				}
 			}
 			
