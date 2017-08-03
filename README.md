@@ -6,7 +6,7 @@ the data is 32-bits. I didn't write this to be **the** memory encryption solutio
 experiment. You can provide your own random number generation (via a derived class of Random::RandomK
 that overrides GetKRandomInt()) and override the memory shuffling if you want.
 
-Note that the provided classes, ShuffledArray and ByteShuffledArray, do not store any internal 
+Note that the provided classes, ShuffledArray, ShuffledCharArray and ByteShuffledArray, do not store any internal 
 state about how they were shuffled. This means that someone analyzing the array stored in the 
 class can't see any explicit information on the shuffling. However, there is a higher performance
 cost for using the class this way.
@@ -26,6 +26,12 @@ For every character in the array three copies of it are added. The resulting arr
 The special shuffling for character arrays is intended to provide basic interference with
 pattern analysis.
 
+## ShuffledCharArray
+This class provides special handling for character arrays by having 3 randomly selected characters
+for every character in the original array. The random characters are chosen from a specific list of
+characters including letters and punctuation. This class is useful because chars occupy a single 
+byte and thus even swapping the bytes around does little to obscure the original content.
+
 ## ByteShuffledArray
 This class shuffles arrays at the byte level. The array that is passed in is treated as a 
 char array with sizeof(type stored in array) * numElements. When a item is retrieved the
@@ -34,14 +40,16 @@ were moved to. The data stored in those bytes is retrieved and combined to recre
 original item **without unshuffling the array**. Each byte is also XORed with the key.
 
 Internally the ByteShuffledArray uses a ShuffledArray of type char to shuffle the bytes and retrieve
-them.
+them. If the type of the ByteCharArray is 'char' it will use a ShuffledCharArray internally
+to shuffle the bytes.
 
 ## Performance
-Both classes generate K*2 random values for the shuffling. In the case of the ShuffledArray K = num items * 2
+ShuffledArray and ByteShuffledArray generate K*2 random values for the shuffling. In the case of the ShuffledArray K = num items * 2
 whiile for the ByteShuffledArray K = num items * numBytes * 2 in each item.  For the ByteShuffledArray there
 is a step where each byte is XORed with the key so that will take another K steps. For both classes the shuffling
 and unshuffling involves K swaps. Thus shuffling is O(K) for both classes but in practice the ByteShuffledArray
-will be far slower.
+will be far slower. A ShuffledCharArray will be four times slower than a ShuffledArray or ByteShuffledArray
+due to the duplicates being shuffled.
 
 Shuffling and unshuffling involve swapping the data in the item slots using temporary variables. Thus the getters
 do not actually unshuffle the arrays and instead calculate where the data went. The K random numbers need
@@ -52,7 +60,9 @@ shuffling and unshuffling the entire array will be slower than retrieving data. 
 will be as slow as shuffling and unshuffling because the data is unshuffled to ensure the correct bytes are written to.
 
 With getters, no data is actually swapped. Instead the items/bytes are llocated and derefenced to copy what is stored
-there.
+there. Thus the data is never unshuffled, even when the class is destroyed. The user needs to manually call Unshuffle
+to get the original data back. With the ShuffledCharArray the unshuffled array has every fourth character as one
+of the original character.
 
 ## Usage
 
