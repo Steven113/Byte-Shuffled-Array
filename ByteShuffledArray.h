@@ -160,7 +160,21 @@ class ByteShuffledArray<char>{
 		*/
 	
 		ByteShuffledArray(char * arr, int count, int key,Random::RandomK random){
-			this->arr = new ShuffledCharArray((char *)arr,count*sizeof(char),key,random);
+			this->arr = new ShuffledCharArray((char *)arr,count*sizeof(char),key,random,4);
+			this->count = count;
+			this->random = random;
+			
+			/* int numBytesPerObject = sizeof(T);
+			
+			for (int i = 0; i<count * numBytesPerObject; ++i){
+				arr[i];
+			} */
+			
+			ShuffleData(key);
+		}
+		
+		ByteShuffledArray(char * arr, int count, int key,Random::RandomK random, int r){
+			this->arr = new ShuffledCharArray((char *)arr,count*sizeof(char),key,random,r);
 			this->count = count;
 			this->random = random;
 			

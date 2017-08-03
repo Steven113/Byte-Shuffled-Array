@@ -208,13 +208,15 @@ char randomCharRef[91] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n
 
 
 /*
-	A special class for handling shuffled arrays of characters. It adds 3 random characters
+	A special class for handling shuffled arrays of characters. It adds r (r = 'replication factor') random characters
 	for every character in the original string and scrambles the result.
 */
 class ShuffledCharArray{
 	protected:
 		
 		int count;
+		
+		int r;
 		
 		Random::RandomK random;
 		
@@ -229,24 +231,25 @@ class ShuffledCharArray{
 			random = a instance of the class Random::RandomK (or a derived class)
 			which is used for random generation.
 		*/
-		ShuffledCharArray(char * arr, int count, int key, Random::RandomK random){
+		ShuffledCharArray(char * arr, int count, int key, Random::RandomK random, int r){
 			std::cout << "Special char scrambled instantiated" << std::endl;
-			this->arr = new char[count *  4];
+			this->arr = new char[count *  (r+1)];
 			
-			int * shuffleIndexes = random.GetKRandomInt(key, count*3);
+			int * shuffleIndexes = random.GetKRandomInt(key, count*(r));
 			
 			for (int i = 0; i<count; ++i){
-				for (int j = 0; j<4; ++j){
+				for (int j = 0; j<(r+1); ++j){
 					if (j == 0){
-						this->arr[i*4 + j] = arr[i];
+						this->arr[i*(r+1) + j] = arr[i];
 					} else {
-						this->arr[i*4 + j] = randomCharRef[(shuffleIndexes[i*3 +j-1]%91)];
+						this->arr[i*(r+1) + j] = randomCharRef[(shuffleIndexes[i*r +j-1]%91)];
 					}
 				}
 			}
 			
 			this->count = count;
 			this->random = random;
+			this->r = r;
 			
 			delete shuffleIndexes;
 			/* int numBytesPerObject = sizeof(T);
@@ -291,16 +294,16 @@ class ShuffledCharArray{
 		virtual void ShuffleData(int key){
 			std::cout << "Shuffle array" <<std::endl;
 			//get count*2 random ints
-			int * shuffleIndexes = random.GetKRandomInt(key, count*4);
+			int * shuffleIndexes = random.GetKRandomInt(key, count*(r+1));
 			
 			/*
 				Clamp the random indexes to the range occupied by the array
 			*/
 			
-			for (int i = 0; i<count*4; ++i){
-				shuffleIndexes[i]%=count*4;
+			for (int i = 0; i<count*(r+1); ++i){
+				shuffleIndexes[i]%=count*(r+1);
 				if (shuffleIndexes[i]<0){
-					shuffleIndexes[i] += count*4;
+					shuffleIndexes[i] += count*(r+1);
 				}
 				//std::cout << shuffleIndexes[i] << " ";
 			}
@@ -310,7 +313,7 @@ class ShuffledCharArray{
 			*/
 			char temp;
 			
-			for (int i = 0; i<count*4; ++i){
+			for (int i = 0; i<count*(r+1); ++i){
 				//std::cout << shuffleIndexes[i*2] << " shuffleIndexes[i*2]" <<std::endl;
 				//std::cout << shuffleIndexes[i*2+1] << " shuffleIndexes[i*2+1]" <<std::endl;
 				temp = arr[shuffleIndexes[i]];
@@ -319,11 +322,11 @@ class ShuffledCharArray{
 				//std::cout << i << " i" <<std::endl;
 			}
 			
-			std::cout << "Shuffled array: ";
-			for (int i = 0; i<count*4; ++i){
+			/* std::cout << "Shuffled array: ";
+			for (int i = 0; i<count*r; ++i){
 				std::cout << arr[i] << " ";
 			}
-			std::cout << std::endl;
+			std::cout << std::endl; */
 			
 			delete [] shuffleIndexes;
 		}
@@ -331,16 +334,16 @@ class ShuffledCharArray{
 		virtual void UnShuffleData(int key){
 			std::cout << "Unshuffle array" <<std::endl;
 			//get random indexes
-			int * shuffleIndexes = random.GetKRandomInt(key, count*4);
+			int * shuffleIndexes = random.GetKRandomInt(key, count*(r+1));
 			
 			/*
 				Clamp the random indexes to the range occupied by the array
 			*/
 			
-			for (int i = 0; i<count*4; ++i){
-				shuffleIndexes[i]%=count*4;
+			for (int i = 0; i<count*(r+1); ++i){
+				shuffleIndexes[i]%=count*(r+1);
 				if (shuffleIndexes[i]<0){
-					shuffleIndexes[i] += count*4;
+					shuffleIndexes[i] += count*(r+1);
 				}
 				//std::cout << shuffleIndexes[i] << " ";
 			}
@@ -352,7 +355,7 @@ class ShuffledCharArray{
 			*/
 			char temp;
 			
-			for (int i = count*4 - 1; i>=0; --i){
+			for (int i = count*(r+1) - 1; i>=0; --i){
 				//std::cout << shuffleIndexes[i*2] << " shuffleIndexes[i*2]" <<std::endl;
 				//std::cout << shuffleIndexes[i*2+1] << " shuffleIndexes[i*2+1]" <<std::endl;
 				temp = arr[shuffleIndexes[i]];
@@ -361,11 +364,11 @@ class ShuffledCharArray{
 				//std::cout << i << " i" <<std::endl;
 			}
 			
-			std::cout << "Unshuffled array: ";
-			for (int i = 0; i<count*4; ++i){
+			/* std::cout << "Unshuffled array: ";
+			for (int i = 0; i<count*r; ++i){
 				std::cout << arr[i] << " ";
 			}
-			std::cout << std::endl;
+			std::cout << std::endl; */
 			
 			delete [] shuffleIndexes;
 		}
@@ -375,12 +378,12 @@ class ShuffledCharArray{
 			in array
 		*/
 		virtual int GetShiftedIndex(int index, int key){
-			int * shuffleIndexes = random.GetKRandomInt(key, count*4);
+			int * shuffleIndexes = random.GetKRandomInt(key, count*(r+1));
 			
-			for (int i = 0; i<count*4; ++i){
-				shuffleIndexes[i]%=count*4;
+			for (int i = 0; i<count*(r+1); ++i){
+				shuffleIndexes[i]%=count*(r+1);
 				if (shuffleIndexes[i]<0){
-					shuffleIndexes[i] += count*4;
+					shuffleIndexes[i] += count*(r+1);
 				}
 			}
 			
@@ -394,9 +397,9 @@ class ShuffledCharArray{
 				we now want to find where index 7 is swapped with another
 				index
 			*/
-			index = index * 4;
+			index = index * (r+1);
 			
-			for (int i = 0; i<count*4; ++i){
+			for (int i = 0; i<count*(r+1); ++i){
 				if (i == index){
 					index = shuffleIndexes[i];
 				} else if (shuffleIndexes[i] == index){
