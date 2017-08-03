@@ -8,7 +8,7 @@ int main(){
 	int key = Random::GetRandomInt();
 	Random::RandomK random;
 	ShuffledArray<int> testShuffledArray(testArr,10,key,random);
-	ShuffledArray<char> testShuffledArray2(testStr,660,key,random);
+	ShuffledCharArray testShuffledArray2(testStr,660,key,random);
 	
 	std::cout << "==================---------------==================" << std::endl;
 	std::cout << "=============  Item Level Shuffling  ==============" << std::endl;

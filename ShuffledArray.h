@@ -6,8 +6,6 @@
 #include <assert.h>
 
 
-
-
 /*
 	Protects an array of objects of type T in memory
 	by keeping it scrambled at the object level in memory when not getting 
@@ -19,6 +17,7 @@
 	it is needed to generate the random values generated for this class to used
 	when scambling the memory. Note that the key is used as a seed for the generator.
 */
+
 
 template <typename T>
 class ShuffledArray{
@@ -203,15 +202,23 @@ class ShuffledArray{
 		}
 };
 
-template <>
-class ShuffledArray<char>{
+//list of chars that can be used by ShuffledCharArray.
+char randomCharRef[91] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','!','(',')','{','}','?','<','$','#','.',',','\n','\n'};
+
+
+
+/*
+	A special class for handling shuffled arrays of characters. It adds 3 random characters
+	for every character in the original string and scrambles the result.
+*/
+class ShuffledCharArray{
 	protected:
 		
 		int count;
 		
 		Random::RandomK random;
 		
-		ShuffledArray(){}
+		ShuffledCharArray(){}
 	public:
 		char * arr;
 		
@@ -222,19 +229,26 @@ class ShuffledArray<char>{
 			random = a instance of the class Random::RandomK (or a derived class)
 			which is used for random generation.
 		*/
-		ShuffledArray(char * arr, int count, int key, Random::RandomK random){
+		ShuffledCharArray(char * arr, int count, int key, Random::RandomK random){
 			std::cout << "Special char scrambled instantiated" << std::endl;
 			this->arr = new char[count *  4];
 			
+			int * shuffleIndexes = random.GetKRandomInt(key, count*3);
+			
 			for (int i = 0; i<count; ++i){
 				for (int j = 0; j<4; ++j){
-					this->arr[i*4 + j] = arr[i];
+					if (j == 0){
+						this->arr[i*4 + j] = arr[i];
+					} else {
+						this->arr[i*4 + j] = randomCharRef[(shuffleIndexes[i*3 +j-1]%91)];
+					}
 				}
 			}
 			
 			this->count = count;
 			this->random = random;
 			
+			delete shuffleIndexes;
 			/* int numBytesPerObject = sizeof(T);
 			
 			for (int i = 0; i<count * numBytesPerObject; ++i){

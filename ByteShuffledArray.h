@@ -143,3 +143,132 @@ class ByteShuffledArray{
 			delete arr;
 		}
 };
+
+template <>
+class ByteShuffledArray<char>{
+	protected:
+		ShuffledCharArray * arr;
+		int count;
+		Random::RandomK random;
+	public:
+		/*
+			arr = data array
+			count = num items in array
+			key = key used to shuffle and unshuffle array
+			random = a instance of the class Random::RandomK (or a derived class)
+			which is used for random generation.
+		*/
+	
+		ByteShuffledArray(char * arr, int count, int key,Random::RandomK random){
+			this->arr = new ShuffledCharArray((char *)arr,count*sizeof(char),key,random);
+			this->count = count;
+			this->random = random;
+			
+			/* int numBytesPerObject = sizeof(T);
+			
+			for (int i = 0; i<count * numBytesPerObject; ++i){
+				arr[i];
+			} */
+			
+			ShuffleData(key);
+		}
+		
+		/*
+				For a byte b in the item, finds where
+				the byte is moved. Combines the bytes
+				to create a char array to cast as
+				the original object
+			*/
+		virtual char get(int index, int key){
+			assert(index >= 0 && index<=count);
+			UnShuffleData(key);
+			
+			int numBytes = sizeof(char);
+			char data[sizeof(char)];
+			
+			for (int i = 0; i<numBytes; ++i){
+				data[i] = arr->get(index*numBytes + i, key);
+			}
+			
+			//index = GetShiftedIndex(index, key);
+			
+			char result = *((char*)&data); 
+			ShuffleData(key);
+			
+			return result;
+		}
+		
+		/*
+				For a byte b in each item, finds where
+				the byte is moved. Combines the bytes
+				to create a char array to cast as
+				the original object
+			*/
+		virtual char * getRange(int start, int end, int key){
+			assert(start >= 0 && end>=start && end<=count);
+			UnShuffleData(key);
+			
+			//index = GetShiftedIndex(index, key);
+			
+			char * result = new char[end-start];
+
+			for (int i = start; i<end; ++i){
+				int numBytes = sizeof(char);
+				char data[sizeof(char)];
+			for (int j = 0; j<numBytes; ++j){
+				data[j] = arr->get(i*numBytes + j, key);
+			} 
+				
+			result[i-start] = *((char*)&data);
+			}
+			
+			ShuffleData(key);
+			
+			return result;
+		}
+				
+		virtual void Set(int index, int key, char item){
+			assert(index >= 0 && index<=count);
+			arr->UnShuffleData(key);
+			UnShuffleData(key);
+			
+			//index = GetShiftedIndex(index, key);
+			
+			arr->arr[index*sizeof(char)] = item;
+			
+			ShuffleData(key);
+			arr->ShuffleData(key);
+		}
+
+		//only applies bit shifting
+		virtual void ShuffleData(int key){
+			
+			
+			int numBytes = count * sizeof(char);
+			int bitOffsets[] = {0,8,16,24};
+			for (int i = 0; i< numBytes; i+=4){
+				for (int j = 0; j<4; ++j){
+					arr->arr[i+j] ^= key >> bitOffsets[j];
+				}
+			}
+		}
+		
+		//only undoes bit shifting		
+		virtual void UnShuffleData(int key){
+			
+			
+			int numBytes = count * sizeof(char);
+			int bitOffsets[] = {0,8,16,24};
+			for (int i = 0; i< numBytes; i+=4){
+				for (int j = 0; j<4; ++j){
+					arr->arr[i+j] ^= key >> bitOffsets[j];
+				}
+			}
+			
+			
+		}
+		
+		~ByteShuffledArray(){
+			delete arr;
+		}
+};
