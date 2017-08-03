@@ -20,6 +20,12 @@ This class provides very simple shuffling. It just moves the data items around. 
 is retrieved or set the entire array is not unshuffled. Instead, the getters and setters use
 the key to work out where the item was moved and get it from there.
 
+Character arrays are given a different treatment to other types. With a character array
+a new array that is four times as large as the original char array is generated. 
+For every character in the array three copies of it are added. The resulting array is shuffled.
+The special shuffling for character arrays is intended to provide basic interference with
+pattern analysis.
+
 ## ByteShuffledArray
 This class shuffles arrays at the byte level. The array that is passed in is treated as a 
 char array with sizeof(type stored in array) * numElements. When a item is retrieved the
