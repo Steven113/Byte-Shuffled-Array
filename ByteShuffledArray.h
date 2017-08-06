@@ -19,20 +19,20 @@ template <typename T>
 class ByteShuffledArray{
 	protected:
 		ShuffledArray<char> * arr;
-		int count;
+		const int count;
 		Random::RandomK random;
 	public:
 		/*
 			arr = data array
-			count = num items in array
+			lcount = num items in array
 			key = key used to shuffle and unshuffle array
 			random = a instance of the class Random::RandomK (or a derived class)
 			which is used for random generation.
 		*/
 	
-		ByteShuffledArray(T * arr, int count, int key,Random::RandomK random){
+		ByteShuffledArray(T * arr, int lcount, int key,Random::RandomK random): count(lcount){
 			this->arr = new ShuffledArray<char>((char *)arr,count*sizeof(T),key,random);
-			this->count = count;
+			//this->count = count;
 			this->random = random;
 			
 			/* int numBytesPerObject = sizeof(T);
@@ -148,20 +148,20 @@ template <>
 class ByteShuffledArray<char>{
 	protected:
 		ShuffledCharArray * arr;
-		int count;
+		const int count;
 		Random::RandomK random;
 	public:
 		/*
 			arr = data array
-			count = num items in array
+			lcount = num items in array
 			key = key used to shuffle and unshuffle array
 			random = a instance of the class Random::RandomK (or a derived class)
 			which is used for random generation.
 		*/
 	
-		ByteShuffledArray(char * arr, int count, int key,Random::RandomK random){
+		ByteShuffledArray(char * arr, int lcount, int key,Random::RandomK random) : count(lcount){
 			this->arr = new ShuffledCharArray((char *)arr,count*sizeof(char),key,random,4);
-			this->count = count;
+			//this->count = count;
 			this->random = random;
 			
 			/* int numBytesPerObject = sizeof(T);
@@ -173,9 +173,9 @@ class ByteShuffledArray<char>{
 			ShuffleData(key);
 		}
 		
-		ByteShuffledArray(char * arr, int count, int key,Random::RandomK random, int r){
+		ByteShuffledArray(char * arr, int lcount, int key,Random::RandomK random, int r) : count(lcount){
 			this->arr = new ShuffledCharArray((char *)arr,count*sizeof(char),key,random,r);
-			this->count = count;
+			//this->count = count;
 			this->random = random;
 			
 			/* int numBytesPerObject = sizeof(T);

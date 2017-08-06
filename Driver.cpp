@@ -4,6 +4,8 @@
 #include "TestingMacros.h"
 
 int main(){
+	//debugPrint = true;
+	
 	int testArr[10] = {1,2,3,4,5,6,7,8,9,10};
 	char testStr11[660] = "Here is the application with my signature. I simply need to type my name in the signature section. \nFor the main project, as opposed to the paper prototyping, you will need to make the request for access to participants. \nThis is done after you get ethics clearance. I will send you the form and process for this in due course.  \nYou can, however, proceed with the paper prototyping. Also, for you main ethics clearance application I think you need \nto provide more detail about the project itself. You can include detail from your proposal. \nYou should also measure other confounding factors, such as age, subject of study, general computer proficiency, etc.";;
 	char testStr12[660] = "Here is the application with my signature. I simply need to type my name in the signature section. \nFor the main project, as opposed to the paper prototyping, you will need to make the request for access to participants. \nThis is done after you get ethics clearance. I will send you the form and process for this in due course.  \nYou can, however, proceed with the paper prototyping. Also, for you main ethics clearance application I think you need \nto provide more detail about the project itself. You can include detail from your proposal. \nYou should also measure other confounding factors, such as age, subject of study, general computer proficiency, etc.";;

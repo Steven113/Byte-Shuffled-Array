@@ -17,13 +17,13 @@
 	it is needed to generate the random values generated for this class to used
 	when scambling the memory. Note that the key is used as a seed for the generator.
 */
-
+bool debugPrint = false;
 
 template <typename T>
 class ShuffledArray{
 	protected:
 		
-		int count;
+		const int count;
 		
 		Random::RandomK random;
 		
@@ -38,9 +38,9 @@ class ShuffledArray{
 			random = a instance of the class Random::RandomK (or a derived class)
 			which is used for random generation.
 		*/
-		ShuffledArray(T * arr, int count, int key, Random::RandomK random){
+		ShuffledArray(T * arr, int lcount, int key, Random::RandomK random) : count(lcount){
 			this->arr = arr;
-			this->count = count;
+			//this->count = count;
 			this->random = random;
 			
 			/* int numBytesPerObject = sizeof(T);
@@ -113,11 +113,13 @@ class ShuffledArray{
 				//std::cout << i << " i" <<std::endl;
 			}
 			
+			if (debugPrint){
 			std::cout << "Shuffled array: ";
 			for (int i = 0; i<count; ++i){
 				std::cout << arr[i] << " ";
 			}
 			std::cout << std::endl;
+			}
 			
 			delete [] shuffleIndexes;
 		}
@@ -155,11 +157,13 @@ class ShuffledArray{
 				//std::cout << i << " i" <<std::endl;
 			}
 			
+			if (debugPrint){
 			std::cout << "Unshuffled array: ";
 			for (int i = 0; i<count; ++i){
 				std::cout << arr[i] << " ";
 			}
 			std::cout << std::endl;
+			}
 			
 			delete [] shuffleIndexes;
 		}
@@ -214,13 +218,13 @@ char randomCharRef[91] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n
 class ShuffledCharArray{
 	protected:
 		
-		int count;
+		const int count;
 		
-		int r;
+		const int r;
 		
 		Random::RandomK random;
 		
-		ShuffledCharArray(){}
+		//ShuffledCharArray()  : count(){}
 	public:
 		char * arr;
 		
@@ -231,8 +235,8 @@ class ShuffledCharArray{
 			random = a instance of the class Random::RandomK (or a derived class)
 			which is used for random generation.
 		*/
-		ShuffledCharArray(char * arr, int count, int key, Random::RandomK random, int r){
-			std::cout << "Special char scrambled instantiated" << std::endl;
+		ShuffledCharArray(char * arr, int lcount, int key, Random::RandomK random, int lr)  : count(lcount), r(lr){
+			std::cout << "Special char scrambled instantiated. " << " r = " << r << std::endl;
 			this->arr = new char[count *  (r+1)];
 			
 			int * shuffleIndexes = random.GetKRandomInt(key, count*(r));
@@ -247,9 +251,9 @@ class ShuffledCharArray{
 				}
 			}
 			
-			this->count = count;
+			//this->count = count;
 			this->random = random;
-			this->r = r;
+			//this->r = r;
 			
 			delete shuffleIndexes;
 			/* int numBytesPerObject = sizeof(T);
@@ -322,11 +326,13 @@ class ShuffledCharArray{
 				//std::cout << i << " i" <<std::endl;
 			}
 			
-			/* std::cout << "Shuffled array: ";
-			for (int i = 0; i<count*r; ++i){
+			if (debugPrint){
+			std::cout << "Shuffled array: ";
+			for (int i = 0; i<count*(r+1); ++i){
 				std::cout << arr[i] << " ";
 			}
-			std::cout << std::endl; */
+			std::cout << "|" << std::endl;
+			}
 			
 			delete [] shuffleIndexes;
 		}
@@ -364,11 +370,13 @@ class ShuffledCharArray{
 				//std::cout << i << " i" <<std::endl;
 			}
 			
-			/* std::cout << "Unshuffled array: ";
-			for (int i = 0; i<count*r; ++i){
+			if (debugPrint){
+			std::cout << "Unshuffled array: ";
+			for (int i = 0; i<count*(r+1); ++i){
 				std::cout << arr[i] << " ";
 			}
-			std::cout << std::endl; */
+			std::cout << "|" << std::endl;
+			}
 			
 			delete [] shuffleIndexes;
 		}
