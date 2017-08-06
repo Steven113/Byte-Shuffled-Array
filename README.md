@@ -1,4 +1,6 @@
 # Byte-Shuffled-Array
+By Steven Tupper
+10thElement@gmail.com
 This project offers c++ arrays of primitive type that are shuffled to  help complicate memory
 analysis by attackers.
 Note that the shuffling is fairly simple, for the sake of performance, and the key for retrieving
@@ -48,21 +50,21 @@ ShuffledArray and ByteShuffledArray generate K*2 random values for the shuffling
 whiile for the ByteShuffledArray K = num items * numBytes * 2 in each item.  For the ByteShuffledArray there
 is a step where each byte is XORed with the key so that will take another K steps. For both classes the shuffling
 and unshuffling involves K swaps. Thus shuffling is O(K) for both classes but in practice the ByteShuffledArray
-will be far slower. A ShuffledCharArray will be four times slower than a ShuffledArray or ByteShuffledArray
-due to the duplicates being shuffled.
+will be far slower. A ShuffledCharArray will be (r+1) times slower than a ShuffledArray or ByteShuffledArray
+due to the r duplicates being shuffled.
 
 Shuffling and unshuffling involve swapping the data in the item slots using temporary variables. Thus the getters
 do not actually unshuffle the arrays and instead calculate where the data went. The K random numbers need
 to be generated and for every item N the K random numbers must be iterated through to get the data back.
 In the case of the ShuffledArray K = 1 because we have one item. In the case of the ByteShuffledArray N = sizeof(T)
 in bytes. Thus the getter complexity is O(N*K). N is a constant specific to the type stored in the array. In practice
-shuffling and unshuffling the entire array will be slower than retrieving data. Setting data in the ByteShuffledArray
+shuffling and unshuffling the entire array will be slower than retrieving data. **Setting** data in the ByteShuffledArray
 will be as slow as shuffling and unshuffling because the data is unshuffled to ensure the correct bytes are written to.
 
 With getters, no data is actually swapped. Instead the items/bytes are llocated and derefenced to copy what is stored
 there. Thus the data is never unshuffled, even when the class is destroyed. The user needs to manually call Unshuffle
-to get the original data back. With the ShuffledCharArray the unshuffled array has every fourth character as one
-of the original character.
+to get the original data back. With the ShuffledCharArray the unshuffled array has every (r+1)th character as one
+of the original characters.
 
 ## Usage
 
