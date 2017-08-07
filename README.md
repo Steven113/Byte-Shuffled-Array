@@ -1,12 +1,17 @@
 # Byte-Shuffled-Array
+
 By Steven Tupper
+
 10thElement@gmail.com
+
 This project offers c++ arrays of primitive type that are shuffled to  help complicate memory
 analysis by attackers.
-Note that the shuffling is fairly simple, for the sake of performance, and the key for retrieving
-the data is 32-bits. I didn't write this to be **the** memory encryption solution. It's mostly an
-experiment. You can provide your own random number generation (via a derived class of Random::RandomK
-that overrides GetKRandomInt()) and override the memory shuffling if you want.
+Note that the shuffling is fairly simple, for the sake of performance. 
+I didn't write this to be **the** memory encryption solution. It's mostly an experiment. 
+You can provide your own random number generation (via a derived class of Random::RandomK
+that overrides GetKRandomInt()) and override the memory shuffling if you want. Also you
+can create derived classes with different lenghts and/or types of keys. 
+In the demo implementations the key is an integer.
 
 Note that the provided classes, ShuffledArray, ShuffledCharArray and ByteShuffledArray, do not store any internal 
 state about how they were shuffled. This means that someone analyzing the array stored in the 
@@ -15,9 +20,9 @@ cost for using the class this way.
 
 **Warning**: Do not use these classes to store arrays of objects. There is a strong chance of a
 buffer overflow exception. I've been having trouble compensation for the alignment and padding
-of objects.
+of objects. If your object has simple fields it may work, but I can't guarantee it.
 
-## ShuffledArray
+## ShuffledArray\<StoredType,KeyType\>
 This class provides very simple shuffling. It just moves the data items around. When a value 
 is retrieved or set the entire array is not unshuffled. Instead, the getters and setters use
 the key to work out where the item was moved and get it from there.
@@ -28,13 +33,13 @@ For every character in the array three copies of it are added. The resulting arr
 The special shuffling for character arrays is intended to provide basic interference with
 pattern analysis.
 
-## ShuffledCharArray
+## ShuffledCharArray\<KeyType\>
 This class provides special handling for character arrays by having 3 randomly selected characters
 for every character in the original array. The random characters are chosen from a specific list of
 characters including letters and punctuation. This class is useful because chars occupy a single 
 byte and thus even swapping the bytes around does little to obscure the original content.
 
-## ByteShuffledArray
+## ByteShuffledArray\<StoredType,KeyType\>
 This class shuffles arrays at the byte level. The array that is passed in is treated as a 
 char array with sizeof(type stored in array) * numElements. When a item is retrieved the
 class works out which bytes contained the original item and finds where those bytes
@@ -75,6 +80,8 @@ where a int array and a char array is generated and then printed out to confirm 
 correctly.
 
 ### Your Own Implementation
-If deriving from the RandomK class you must ensure that GetKRandomInt(int key, int K) must always return the same sequence of 
-random integers given a seed "key". If you call the function with K = 3 the 3 integers you get back must match the first 3 integers you'd get when calling the funciton with K = 5. Thus K cannot be used to calculate the random values.
+If deriving from the RandomK class you must implement the GetKRandomInt(KeyType key, int K) method as follows:
+
+- It must always return the same sequence of random integers given a seed "key". 
+- If you call the function with K = 3 the 3 integers you get back must match the first 3 integers you'd get when calling the funciton with K = 5. Thus K cannot be used to calculate the random values. 
 
