@@ -1,6 +1,7 @@
 #ifndef SHUFFLED_ARRAY
 #define SHUFFLED_ARRAY
 #include "Random.h"
+#include "Conversion.h"
 #include <iostream>
 #include <string>
 #include <assert.h>

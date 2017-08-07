@@ -105,7 +105,7 @@ class ByteShuffledArray{
 			
 			//index = GetShiftedIndex(index, key);
 			
-			arr->arr[index*sizeof(T)] = item;
+			arr->arr[index*sizeof(T)] = *static_cast<char *>(static_cast<void*>(&item));
 			
 			ShuffleData(key);
 			arr->ShuffleData(key);
