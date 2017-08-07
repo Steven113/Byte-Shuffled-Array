@@ -19,13 +19,13 @@
 */
 bool debugPrint = false;
 
-template <typename T>
+template <typename T, typename K>
 class ShuffledArray{
 	protected:
 		
 		const int count;
 		
-		Random::RandomK random;
+		Random::RandomK<K> random;
 		
 		ShuffledArray(){}
 	public:
@@ -38,7 +38,7 @@ class ShuffledArray{
 			random = a instance of the class Random::RandomK (or a derived class)
 			which is used for random generation.
 		*/
-		ShuffledArray(T * arr, int lcount, int key, Random::RandomK random) : count(lcount){
+		ShuffledArray(T * arr, int lcount, K key, Random::RandomK<K> random) : count(lcount){
 			this->arr = arr;
 			//this->count = count;
 			this->random = random;
@@ -52,7 +52,7 @@ class ShuffledArray{
 			ShuffleData(key);
 		}
 				
-		virtual T get(int index, int key){
+		virtual T get(int index, K key){
 			assert(index >= 0 && index<=count);
 			//UnShuffleData(key);
 			
@@ -68,7 +68,7 @@ class ShuffledArray{
 			return result;
 		}
 				
-		virtual void Set(int index, int key, T item){
+		virtual void Set(int index, K key, T item){
 			assert(index >= 0 && index<=count);
 			//UnShuffleData(key);
 			
@@ -82,7 +82,7 @@ class ShuffledArray{
 			//ShuffleData(key);
 		}
 
-		virtual void ShuffleData(int key){
+		virtual void ShuffleData(K key){
 			std::cout << "Shuffle array" <<std::endl;
 			//get count*2 random ints
 			int * shuffleIndexes = random.GetKRandomInt(key, count);
@@ -124,7 +124,7 @@ class ShuffledArray{
 			delete [] shuffleIndexes;
 		}
 				
-		virtual void UnShuffleData(int key){
+		virtual void UnShuffleData(K key){
 			std::cout << "Unshuffle array" <<std::endl;
 			//get random indexes
 			int * shuffleIndexes = random.GetKRandomInt(key, count);
@@ -172,7 +172,7 @@ class ShuffledArray{
 			Get item at index by finding where the shuffling process moves it 
 			in array
 		*/
-		virtual int GetShiftedIndex(int index, int key){
+		virtual int GetShiftedIndex(int index, K key){
 			int * shuffleIndexes = random.GetKRandomInt(key, count);
 			
 			for (int i = 0; i<count; ++i){
@@ -215,6 +215,7 @@ char randomCharRef[91] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n
 	A special class for handling shuffled arrays of characters. It adds r (r = 'replication factor') random characters
 	for every character in the original string and scrambles the result.
 */
+template <typename K>
 class ShuffledCharArray{
 	protected:
 		
@@ -222,7 +223,7 @@ class ShuffledCharArray{
 		
 		const int r;
 		
-		Random::RandomK random;
+		Random::RandomK<K> random;
 		
 		//ShuffledCharArray()  : count(){}
 	public:
@@ -235,7 +236,7 @@ class ShuffledCharArray{
 			random = a instance of the class Random::RandomK (or a derived class)
 			which is used for random generation.
 		*/
-		ShuffledCharArray(char * arr, int lcount, int key, Random::RandomK random, int lr)  : count(lcount), r(lr){
+		ShuffledCharArray(char * arr, int lcount, K key, Random::RandomK<K> random, int lr)  : count(lcount), r(lr){
 			std::cout << "Special char scrambled instantiated. " << " r = " << r << std::endl;
 			this->arr = new char[count *  (r+1)];
 			
@@ -265,7 +266,7 @@ class ShuffledCharArray{
 			ShuffleData(key);
 		}
 				
-		char get(int index, int key) {
+		char get(int index, K key) {
 			assert(index >= 0 && index<=count);
 			//UnShuffleData(key);
 			
@@ -281,7 +282,7 @@ class ShuffledCharArray{
 			return result;
 		}
 				
-		virtual void Set(int index, int key, char item){
+		virtual void Set(int index, K key, char item){
 			assert(index >= 0 && index<=count);
 			//UnShuffleData(key);
 			
@@ -295,7 +296,7 @@ class ShuffledCharArray{
 			//ShuffleData(key);
 		}
 
-		virtual void ShuffleData(int key){
+		virtual void ShuffleData(K key){
 			std::cout << "Shuffle array" <<std::endl;
 			//get count*2 random ints
 			int * shuffleIndexes = random.GetKRandomInt(key, count*(r+1));
@@ -337,7 +338,7 @@ class ShuffledCharArray{
 			delete [] shuffleIndexes;
 		}
 				
-		virtual void UnShuffleData(int key){
+		virtual void UnShuffleData(K key){
 			std::cout << "Unshuffle array" <<std::endl;
 			//get random indexes
 			int * shuffleIndexes = random.GetKRandomInt(key, count*(r+1));
@@ -385,7 +386,7 @@ class ShuffledCharArray{
 			Get item at index by finding where the shuffling process moves it 
 			in array
 		*/
-		virtual int GetShiftedIndex(int index, int key){
+		virtual int GetShiftedIndex(int index, K key){
 			int * shuffleIndexes = random.GetKRandomInt(key, count*(r+1));
 			
 			for (int i = 0; i<count*(r+1); ++i){

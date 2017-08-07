@@ -15,12 +15,12 @@
 	A getter will not unshuffle the entire array. Instead it will locate the bytes
 	that store that item and combine them to regenerate the item.
 */
-template <typename T>
+template <typename T, typename K>
 class ByteShuffledArray{
 	protected:
-		ShuffledArray<char> * arr;
+		ShuffledArray<char, K> * arr;
 		const int count;
-		Random::RandomK random;
+		Random::RandomK<K> random;
 	public:
 		/*
 			arr = data array
@@ -30,8 +30,8 @@ class ByteShuffledArray{
 			which is used for random generation.
 		*/
 	
-		ByteShuffledArray(T * arr, int lcount, int key,Random::RandomK random): count(lcount){
-			this->arr = new ShuffledArray<char>((char *)arr,count*sizeof(T),key,random);
+		ByteShuffledArray(T * arr, int lcount, K key,Random::RandomK<K> random): count(lcount){
+			this->arr = new ShuffledArray<char, K>((char *)arr,count*sizeof(T),key,random);
 			//this->count = count;
 			this->random = random;
 			
@@ -50,7 +50,7 @@ class ByteShuffledArray{
 				to create a char array to cast as
 				the original object
 			*/
-		virtual T get(int index, int key){
+		virtual T get(int index, K key){
 			assert(index >= 0 && index<=count);
 			UnShuffleData(key);
 			
@@ -75,7 +75,7 @@ class ByteShuffledArray{
 				to create a char array to cast as
 				the original object
 			*/
-		virtual T * getRange(int start, int end, int key){
+		virtual T * getRange(int start, int end, K key){
 			assert(start >= 0 && end>=start && end<=count);
 			UnShuffleData(key);
 			
@@ -98,7 +98,7 @@ class ByteShuffledArray{
 			return result;
 		}
 				
-		virtual void Set(int index, int key, T item){
+		virtual void Set(int index, K key, T item){
 			assert(index >= 0 && index<=count);
 			arr->UnShuffleData(key);
 			UnShuffleData(key);
@@ -112,7 +112,7 @@ class ByteShuffledArray{
 		}
 
 		//only applies bit shifting
-		virtual void ShuffleData(int key){
+		virtual void ShuffleData(K key){
 			
 			
 			int numBytes = count * sizeof(T);
@@ -125,7 +125,7 @@ class ByteShuffledArray{
 		}
 		
 		//only undoes bit shifting		
-		virtual void UnShuffleData(int key){
+		virtual void UnShuffleData(K key){
 			
 			
 			int numBytes = count * sizeof(T);
@@ -144,12 +144,12 @@ class ByteShuffledArray{
 		}
 };
 
-template <>
-class ByteShuffledArray<char>{
+template <typename K>
+class ByteShuffledArray<char,K>{
 	protected:
-		ShuffledCharArray * arr;
+		ShuffledCharArray<K> * arr;
 		const int count;
-		Random::RandomK random;
+		Random::RandomK<K> random;
 	public:
 		/*
 			arr = data array
@@ -159,7 +159,7 @@ class ByteShuffledArray<char>{
 			which is used for random generation.
 		*/
 	
-		ByteShuffledArray(char * arr, int lcount, int key,Random::RandomK random) : count(lcount){
+		ByteShuffledArray(char * arr, int lcount, K key,Random::RandomK<K> random) : count(lcount){
 			this->arr = new ShuffledCharArray((char *)arr,count*sizeof(char),key,random,4);
 			//this->count = count;
 			this->random = random;
@@ -173,8 +173,8 @@ class ByteShuffledArray<char>{
 			ShuffleData(key);
 		}
 		
-		ByteShuffledArray(char * arr, int lcount, int key,Random::RandomK random, int r) : count(lcount){
-			this->arr = new ShuffledCharArray((char *)arr,count*sizeof(char),key,random,r);
+		ByteShuffledArray(char * arr, int lcount, K key,Random::RandomK<K> random, int r) : count(lcount){
+			this->arr = new ShuffledCharArray<int>((char *)arr,count*sizeof(char),key,random,r);
 			//this->count = count;
 			this->random = random;
 			
@@ -193,7 +193,7 @@ class ByteShuffledArray<char>{
 				to create a char array to cast as
 				the original object
 			*/
-		virtual char get(int index, int key){
+		virtual char get(int index, K key){
 			assert(index >= 0 && index<=count);
 			UnShuffleData(key);
 			
@@ -218,7 +218,7 @@ class ByteShuffledArray<char>{
 				to create a char array to cast as
 				the original object
 			*/
-		virtual char * getRange(int start, int end, int key){
+		virtual char * getRange(int start, int end, K key){
 			assert(start >= 0 && end>=start && end<=count);
 			UnShuffleData(key);
 			
@@ -241,7 +241,7 @@ class ByteShuffledArray<char>{
 			return result;
 		}
 				
-		virtual void Set(int index, int key, char item){
+		virtual void Set(int index, K key, char item){
 			assert(index >= 0 && index<=count);
 			arr->UnShuffleData(key);
 			UnShuffleData(key);
@@ -255,7 +255,7 @@ class ByteShuffledArray<char>{
 		}
 
 		//only applies bit shifting
-		virtual void ShuffleData(int key){
+		virtual void ShuffleData(K key){
 			
 			
 			int numBytes = count * sizeof(char);
@@ -268,7 +268,7 @@ class ByteShuffledArray<char>{
 		}
 		
 		//only undoes bit shifting		
-		virtual void UnShuffleData(int key){
+		virtual void UnShuffleData(K key){
 			
 			
 			int numBytes = count * sizeof(char);

@@ -13,12 +13,12 @@ int main(){
 	char testStr14[660] = "Here is the application with my signature. I simply need to type my name in the signature section. \nFor the main project, as opposed to the paper prototyping, you will need to make the request for access to participants. \nThis is done after you get ethics clearance. I will send you the form and process for this in due course.  \nYou can, however, proceed with the paper prototyping. Also, for you main ethics clearance application I think you need \nto provide more detail about the project itself. You can include detail from your proposal. \nYou should also measure other confounding factors, such as age, subject of study, general computer proficiency, etc.";
 	
 	int key = Random::GetRandomInt();
-	Random::RandomK random;
-	ShuffledArray<int> testShuffledArray(testArr,10,key,random);
-	ShuffledCharArray testShuffledArray2(testStr11,660,key,random,4);
-	ShuffledCharArray testShuffledArray3(testStr12,660,key,random,1);
-	ShuffledCharArray testShuffledArray4(testStr13,660,key,random,6);
-	ShuffledCharArray testShuffledArray5(testStr14,660,key,random,0);
+	Random::RandomK<int> random;
+	ShuffledArray<int,int> testShuffledArray(testArr,10,key,random);
+	ShuffledCharArray<int> testShuffledArray2(testStr11,660,key,random,4);
+	ShuffledCharArray<int> testShuffledArray3(testStr12,660,key,random,1);
+	ShuffledCharArray<int> testShuffledArray4(testStr13,660,key,random,6);
+	ShuffledCharArray<int> testShuffledArray5(testStr14,660,key,random,0);
 	
 	std::cout << "==================---------------==================" << std::endl;
 	std::cout << "=============  Item Level Shuffling  ==============" << std::endl;
@@ -58,11 +58,11 @@ int main(){
 	char testStr22[660] = "Here is the application with my signature. I simply need to type my name in the signature section. \nFor the main project, as opposed to the paper prototyping, you will need to make the request for access to participants. \nThis is done after you get ethics clearance. I will send you the form and process for this in due course.  \nYou can, however, proceed with the paper prototyping. Also, for you main ethics clearance application I think you need \nto provide more detail about the project itself. You can include detail from your proposal. \nYou should also measure other confounding factors, such as age, subject of study, general computer proficiency, etc.";
 	char testStr23[660] = "Here is the application with my signature. I simply need to type my name in the signature section. \nFor the main project, as opposed to the paper prototyping, you will need to make the request for access to participants. \nThis is done after you get ethics clearance. I will send you the form and process for this in due course.  \nYou can, however, proceed with the paper prototyping. Also, for you main ethics clearance application I think you need \nto provide more detail about the project itself. You can include detail from your proposal. \nYou should also measure other confounding factors, such as age, subject of study, general computer proficiency, etc.";
 	char testStr24[660] = "Here is the application with my signature. I simply need to type my name in the signature section. \nFor the main project, as opposed to the paper prototyping, you will need to make the request for access to participants. \nThis is done after you get ethics clearance. I will send you the form and process for this in due course.  \nYou can, however, proceed with the paper prototyping. Also, for you main ethics clearance application I think you need \nto provide more detail about the project itself. You can include detail from your proposal. \nYou should also measure other confounding factors, such as age, subject of study, general computer proficiency, etc.";
-	ByteShuffledArray<int> testByteShuffledArray(testArr2,10,key,random);
-	ByteShuffledArray<char> testByteShuffledArray2(testStr21,660,key,random,4);
-	ByteShuffledArray<char> testByteShuffledArray3(testStr22,660,key,random,1);
-	ByteShuffledArray<char> testByteShuffledArray4(testStr23,660,key,random,6);
-	ByteShuffledArray<char> testByteShuffledArray5(testStr24,660,key,random,0);
+	ByteShuffledArray<int,int> testByteShuffledArray(testArr2,10,key,random);
+	ByteShuffledArray<char,int> testByteShuffledArray2(testStr21,660,key,random,4);
+	ByteShuffledArray<char,int> testByteShuffledArray3(testStr22,660,key,random,1);
+	ByteShuffledArray<char,int> testByteShuffledArray4(testStr23,660,key,random,6);
+	ByteShuffledArray<char,int> testByteShuffledArray5(testStr24,660,key,random,0);
 	int * rangeArray = testByteShuffledArray.getRange(0,10,key);
 	for (int i = 0; i<10; ++i){
 		std::cout << testByteShuffledArray.get(i,key) << " ";

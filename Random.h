@@ -34,11 +34,18 @@ namespace Random{
 		return result;
 	}
 	
+	template <typename KEY>
+	class RandomK{
+		public:
+			virtual int * GetKRandomInt(KEY key, int K) = 0;
+	};
+	
 	/*
 		Functor for function GetKRandomInt that returns an array of K integers
 		given a seed "key". Note the resulting values depend entirely on the seed.
 	*/
-	class RandomK{
+	template <>
+	class RandomK<int>{
 		public:
 			virtual int * GetKRandomInt(int key, int K){
 				srand(key);
