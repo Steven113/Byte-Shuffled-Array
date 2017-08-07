@@ -34,6 +34,11 @@ namespace Random{
 		return result;
 	}
 	
+	/*
+		Wrapper for function GetKRandomInt that returns an array of K integers
+		given a seed "key" of type KEY. Note the resulting values depend entirely on the seed.
+	*/
+	
 	template <typename KEY>
 	class RandomK{
 		public:
@@ -41,8 +46,7 @@ namespace Random{
 	};
 	
 	/*
-		Functor for function GetKRandomInt that returns an array of K integers
-		given a seed "key". Note the resulting values depend entirely on the seed.
+		Specialization of RandomK for int, uses basic c++ random number generation
 	*/
 	template <>
 	class RandomK<int>{
